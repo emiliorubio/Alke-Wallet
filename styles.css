@@ -1,11 +1,17 @@
 body {
         background-color: rgba(230, 218, 161, 0.203);
-      padding: 20px;
+        padding: 10px;
     }
 
     main {
     display: flex;
     align-items: center;
+}
+
+.navbar {
+    background-color: #fafdff;
+    margin-bottom: 20px;
+    border-radius: 10px;
 }
 
 @media (min-width: 992px) {
@@ -19,3 +25,18 @@ body {
     transition: 0.3s;
 }
 
+footer {
+    flex-shrink: 0;
+    width: 100%;
+    padding: 1.5rem 0;
+    background-color: #ffffff;
+    border-top: 1px solid #dee2e6;
+}
+
+/* 4. Ajustes Responsive para los enlaces */
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap; /* Permite que se rompa en varias líneas en móviles */
+}

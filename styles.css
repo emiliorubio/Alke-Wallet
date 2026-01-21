@@ -1,0 +1,21 @@
+body {
+        background-color: rgba(230, 218, 161, 0.203);
+      padding: 20px;
+    }
+
+    main {
+    display: flex;
+    align-items: center;
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 1000px;
+    }
+}
+
+.container.bg-light {
+    border-radius: 15px;
+    transition: 0.3s;
+}
+

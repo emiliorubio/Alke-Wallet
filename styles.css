@@ -5,9 +5,10 @@ html, body {
 
 body {
     background-color: rgba(230, 218, 161, 0.203);
-    padding: 10px;
+    padding: 0 0 10px 0;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
 
@@ -20,6 +21,12 @@ body {
     background-color: #fafdff;
     margin-bottom: 20px;
     border-radius: 10px;
+    padding: 0.5rem 1rem;
+}
+
+.container {
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 @media (min-width: 992px) {

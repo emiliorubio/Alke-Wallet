@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    const movimientosGuardados = JSON.parse(localStorage.getItem('transactionHistory')) || [];
+    const movimientosGuardados = JSON.parse(localStorage.getItem('misMovimientos')) || [];
 
     const ejemplos = [
         { tipo: 'compra', monto: 5000, detalle: 'Compra en línea Amazon' },

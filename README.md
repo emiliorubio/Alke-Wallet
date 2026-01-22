@@ -7,6 +7,7 @@ En este proyecto puse en práctica lo que aprendimos en la primera etapa del boo
 ## 🔗 Enlace al sitio (Netlify)
 Puedes ver mi proyecto funcionando aquí: 
 👉 [https://alkewalleterm.netlify.app]
+**user:admin** **password: 1234**
 
 ## 🛠️ ¿Qué usé para este proyecto?
 Para armar la wallet ocupé estas herramientas:

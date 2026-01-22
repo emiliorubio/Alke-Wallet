@@ -1,17 +1,19 @@
 $(document).ready(function() {
-    const movimientos = [
+    const movimientosGuardados = JSON.parse(localStorage.getItem('transactionHistory')) || [];
+
+    const ejemplos = [
         { tipo: 'compra', monto: 5000, detalle: 'Compra en línea Amazon' },
         { tipo: 'deposito', monto: 100000, detalle: 'Depósito por ventanilla' },
-        { tipo: 'transferencia', monto: 75000, detalle: 'Transferencia de Juan Pérez' },
-        { tipo: 'compra', monto: 12000, detalle: 'Suscripción Netflix' },
-        { tipo: 'deposito', monto: 50000, detalle: 'Carga de saldo' }
+        { tipo: 'transferencia', monto: 75000, detalle: 'Transferencia de Juan Pérez' }
     ];
+
+    const todosLosMovimientos = [...movimientosGuardados, ...ejemplos];
 
     function getTipoTransaccion(tipo) {
         const tipos = {
             'compra': '🛒 Compra en línea',
             'deposito': '💰 Depósito realizado',
-            'transferencia': '💸 Transferencia recibida'
+            'transferencia': '💸 Transferencia realizada/recibida'
         };
         return tipos[tipo] || 'Otro movimiento';
     }
@@ -21,9 +23,14 @@ $(document).ready(function() {
         $lista.empty();
 
         const movimientosFiltrados = filtro === 'todos' 
-            ? movimientos 
-            : movimientos.filter(m => m.tipo === filtro);
+            ? todosLosMovimientos 
+            : todosLosMovimientos.filter(m => m.tipo === filtro);
 
+        if (movimientosFiltrados.length === 0) {
+            $lista.append(`<li class="list-group-item text-center">No hay movimientos registrados.</li>`);    
+            return;
+        }
+        
         movimientosFiltrados.forEach(mov => {
             const montoFormateado = mov.monto.toLocaleString('es-CL', { 
                 style: 'currency', 
@@ -32,7 +39,7 @@ $(document).ready(function() {
             });
 
             $lista.append(`
-                <li class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div>
                         <strong>${getTipoTransaccion(mov.tipo)}</strong><br>
                         <small class="text-muted">${mov.detalle}</small>
@@ -46,8 +53,7 @@ $(document).ready(function() {
     }
 
     $('#filtroTipo').on('change', function() {
-        const seleccion = $(this).val();
-        mostrarUltimosMovimientos(seleccion);
+        mostrarUltimosMovimientos($(this).val());
     });
 
     mostrarUltimosMovimientos('todos');

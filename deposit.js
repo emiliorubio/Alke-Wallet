@@ -21,7 +21,7 @@ $(document).ready(function() {
 
         if (isNaN(monto) || monto <= 0) {
             $('#liveAlertPlaceholder').html(`
-                <div class="alert alert-danger" role="alert">Monto no válido.</div>
+                <div class="alert alert-danger" role="alert">Ingrese un monto válido.</div>
             `);
             return;
         }
@@ -29,6 +29,17 @@ $(document).ready(function() {
         let saldoPrevio = parseFloat(localStorage.getItem('userBalance')) || 0;
         let nuevoSaldo = saldoPrevio + monto;
         localStorage.setItem('userBalance', nuevoSaldo);
+
+        const nuevoMovimiento = {
+            tipo: 'deposito',
+            monto: monto,
+            detalle: 'Depósito de efectivo realizado',
+            fecha: new Date().toISOString()
+        };
+
+        let historial = JSON.parse(localStorage.getItem('transactionHistory') || '[]');
+        historial.unshift(nuevoMovimiento);
+        localStorage.setItem('transactionHistory', JSON.stringify(historial));
 
         if ($('#leyendaMonto').length === 0) {
             $('form').after('<div id="leyendaMonto" class="mt-3 h5 text-success"></div>');

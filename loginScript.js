@@ -10,7 +10,7 @@ $(document).ready(function() {
             
             $contenedor.html(`
                 <div class="alert alert-success" role="alert">
-                    ¡Bienvenido! Redirigiendo a tu menú principal en 4 segundos...
+                    ¡Bienvenido! Redirigiendo a tu menú principal en 3 segundos...
                 </div>
             `);
 

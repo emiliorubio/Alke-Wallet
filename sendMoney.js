@@ -1,14 +1,20 @@
 $(document).ready(function() {
-    let contactos = [
+    let contactosGuardados = JSON.parse(localStorage.getItem('misContactos'));
+    let contactos = contactosGuardados || [
         { nombre: "John Doe", rut: "12345678-9", alias: "john.doe", banco: "Banco Estado" },
         { nombre: "Jane Smith", rut: "98765432-1", alias: "jane.s", banco: "Santander" },
         { nombre: "Carolina A", rut: "987654321-0", alias: "Caro", banco: "Banco De Chile" },
     ];
 
     let saldo = parseFloat(localStorage.getItem('userBalance')) || 60000;
-    $('#balanceDisplay').text(saldo.toLocaleString('es-CL', { style: 'currency', currency: 'CLP', minimumFractionDigits: 0 }));
+    
+    const formatoCLP = (valor) => valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP', minimumFractionDigits: 0 });
+
+    $('#balanceDisplay').text(formatoCLP(saldo));
+
     $('#btnShowAddContact').click(() => $('#containerNuevoContacto').slideDown());
     $('#btnCancelAdd').click(() => $('#containerNuevoContacto').slideUp());
+
     $('#formNuevoContacto').submit(function(e) {
         e.preventDefault();
         const nuevo = {
@@ -24,6 +30,7 @@ $(document).ready(function() {
         }
 
         contactos.push(nuevo);
+        localStorage.setItem('misContactos', JSON.stringify(contactos)); 
         renderizarContactos(contactos);
         this.reset();
         $('#containerNuevoContacto').slideUp();
@@ -52,16 +59,15 @@ $(document).ready(function() {
     $(document).on('click', '.contact-item', function() {
         $('.contact-item').removeClass('active bg-primary text-white');
         $(this).addClass('active bg-primary text-white');
-        
         let idx = $(this).data('index');
         $('#selectedContactName').text(contactos[idx].nombre);
         $('#containerEnvio').fadeIn();
     });
 
     $('#btnRealizarEnvio').click(function() {
-        let monto = parseFloat($('#montoEnvio').val());
+        let monto = parseFloat($('#montoEnviar').val());
         
-        if (monto > saldo || monto <= 0) {
+        if (monto > saldo || monto <= 0 || isNaN(monto)) {
             alert("Saldo insuficiente o monto inválido");
             return;
         }
@@ -69,13 +75,25 @@ $(document).ready(function() {
         saldo -= monto;
         localStorage.setItem('userBalance', saldo);
         
+        const destinatario = $('#selectedContactName').text();
+        const nuevoMovimiento = {
+            tipo: 'transferencia',
+            monto: monto,
+            detalle: `Envío a: ${destinatario}`,
+            fecha: new Date().toISOString()
+        };
+
+        let historial = JSON.parse(localStorage.getItem('misMovimientos') || '[]');
+        historial.unshift(nuevoMovimiento);
+        localStorage.setItem('misMovimientos', JSON.stringify(historial));
+
         $('#confirmacionEnvio').html(`
             <div class="alert alert-success mt-3">
-                ✅ Envío realizado con éxito a ${$('#selectedContactName').text()}.
+                ✅ Transferencia de ${formatoCLP(monto)} Realizada con éxito.
             </div>
         `);
 
-        setTimeout(() => window.location.href = 'menuPrincipal.html', 2500);
+        setTimeout(() => window.location.href = 'transactions.html', 2500);
     });
 
     renderizarContactos(contactos);
